@@ -1,0 +1,6 @@
+[0m[[0m[31merror[0m] [0m[0m/home/valia/Documents/CompLangProc/proj6/src/amyc/codegen/CodeGen.scala:178:9: type mismatch;[0m
+[0m[[0m[31merror[0m] [0m[0m found   : Unit[0m
+[0m[[0m[31merror[0m] [0m[0m required: amyc.wasm.Instructions.Code[0m
+[0m[[0m[31merror[0m] [0m[0m        }[0m
+[0m[[0m[31merror[0m] [0m[0m        ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m
