@@ -234,5 +234,8 @@ object TypeChecker extends Pipeline[(Program, SymbolTable), (Program, SymbolTabl
 
     v
 
+
   }
+
+
 }

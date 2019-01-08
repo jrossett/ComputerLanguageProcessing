@@ -23,6 +23,8 @@ class SymbolTable {
   private val modules = HashMap[String, Identifier]()
 
   private val types = HashMap[Identifier, Identifier]()
+  //Map corresponding to subtype -> supertype
+  private val typesDependencies = HashMap[Identifier, Identifier]()
   private val functions = HashMap[Identifier, FunSig]()
   private val constructors = HashMap[Identifier, ConstrSig]()
 
@@ -43,8 +45,26 @@ class SymbolTable {
     types += (s -> modules.getOrElse(owner, sys.error(s"Module $name not found!")))
     s
   }
+
+  //Add subtype -> type dependecy
+  def addTypeDependecies(owner: String, name: String, superType: String) = {
+    val s = defsByName.get(owner, name)
+    val sType = defsByName.get(owner, superType)
+    (s, sType) match {
+      case (Some(s), Some(sType)) =>
+
+        types.get(sType) match {
+          case Some(t) =>
+            typesDependencies += (s -> t)
+            s
+          case _ =>
+        }
+      case _ =>
+    }
+  }
   def getType(owner: String, name: String) =
     defsByName.get(owner,name) filter types.contains
+
   def getType(symbol: Identifier) = types.get(symbol)
 
   def addConstructor(owner: String, name: String, argTypes: List[Type], parent: Identifier) = {
@@ -82,4 +102,23 @@ class SymbolTable {
   }
   def getFunction(symbol: Identifier) = functions.get(symbol)
 
+  //method checking if type is subtype of expected
+  def isSubtype(found : Type, expected: Type) : Boolean = found match {
+    case IntType =>
+      found.equals(expected)
+    case BooleanType =>
+      found.equals(expected)
+    case StringType =>
+      found.equals(expected)
+    case UnitType =>
+      found.equals(expected)
+    case ClassType(name) =>
+      if(name.equals(null))
+        return false
+      if(found.equals(expected))
+        return true
+
+      val superType = typesDependencies.get(name).getOrElse(null)
+      isSubtype(ClassType(superType), expected)
+  }
 }

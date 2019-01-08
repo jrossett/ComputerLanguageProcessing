@@ -81,6 +81,11 @@ object NameAnalyzer extends Pipeline[N.Program, (S.Program, SymbolTable)] {
       case(name, defs) =>
         defs.foreach(d => d match{
           case N.CaseClassDef(cname, fields, parent)=>
+            //add class to types
+            table.addType(name, cname)
+            //add dependencies between parent and the new class
+            table.addTypeDependecies(name, cname, parent)
+
             table.addConstructor(name, cname,
               fields.map(transformType(_, name)),
               table.getType(name, parent).
