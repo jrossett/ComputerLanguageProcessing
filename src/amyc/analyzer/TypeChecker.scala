@@ -175,6 +175,7 @@ object TypeChecker extends Pipeline[(Program, SymbolTable), (Program, SymbolTabl
     // Solve the given set of typing constraints and
     //  call `typeError` if they are not satisfiable.
     // We consider a set of constraints to be satisfiable exactly if they unify.
+    //TODO: Might not be the best way
     def solveConstraints(constraints: List[Constraint]): Unit = {
       constraints match {
         case Nil => ()
@@ -183,35 +184,30 @@ object TypeChecker extends Pipeline[(Program, SymbolTable), (Program, SymbolTabl
           //       by another type in your current set of constraints.
           found match {
             case TypeVariable(id) => expected match{
-              case TypeVariable(idExp) if(idExp == id)=> solveConstraints(more)
+              case TypeVariable(idExp) if(table.isSubtype(found, expected))=> solveConstraints(more)
               case _ => solveConstraints(subst_*(more, id, expected))}
 
             case IntType => expected match{
-              case IntType => solveConstraints(more)
-              case TypeVariable(id) => solveConstraints(subst_*(more, id, IntType))
+              case _ if(table.isSubtype(found, expected)) => solveConstraints(more)
               case _ => error("typeError", pos)
             }
             case BooleanType => expected match{
-              case BooleanType => solveConstraints(more)
-              case TypeVariable(id) => solveConstraints(subst_*(more, id, BooleanType))
+              case _ if(table.isSubtype(found, expected)) => solveConstraints(more)
               case _ => error("typeError", pos)
             }
 
             case StringType => expected match{
-              case StringType => solveConstraints(more)
-              case TypeVariable(id) => solveConstraints(subst_*(more, id, StringType))
+              case _ if(table.isSubtype(found, expected)) => solveConstraints(more)
               case _ => error("typeError", pos)
             }
 
             case UnitType => expected match{
-              case UnitType => solveConstraints(more)
-              case TypeVariable(id) => solveConstraints(subst_*(more, id, UnitType))
+              case _ if(table.isSubtype(found, expected)) => solveConstraints(more)
               case _ => error("typeError", pos)
             }
 
             case ClassType(x) => expected match{
-              case ClassType(y) if (x==y)=> solveConstraints(more)
-              case TypeVariable(id) => solveConstraints(subst_*(more, id, ClassType(x)))
+              case _ if (table.isSubtype(found, expected))=> solveConstraints(more)
               case _ => error("typeError", pos)
             }
           }

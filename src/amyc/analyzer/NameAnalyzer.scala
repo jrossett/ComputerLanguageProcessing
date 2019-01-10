@@ -81,6 +81,7 @@ object NameAnalyzer extends Pipeline[N.Program, (S.Program, SymbolTable)] {
       case(name, defs) =>
         defs.foreach(d => d match{
           case N.CaseClassDef(cname, fields, parent)=>
+
             //add class to types
             table.addType(name, cname)
             //add dependencies between parent and the new class
@@ -335,7 +336,6 @@ object NameAnalyzer extends Pipeline[N.Program, (S.Program, SymbolTable)] {
           S.Sequence(transformExpr(e1), transformExpr(e2))
 
         //  case class Let(df: ParamDef, value: Expr, body: Expr) extends Expr
-
         case N.Let(df, value, body) =>{
 
           if(locals.get(df.name) != None){

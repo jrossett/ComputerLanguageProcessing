@@ -105,20 +105,42 @@ class SymbolTable {
   //method checking if type is subtype of expected
   def isSubtype(found : Type, expected: Type) : Boolean = found match {
     case IntType =>
-      found.equals(expected)
+      expected match {
+        case IntType =>
+          true
+        case _ =>
+          false
+      }
     case BooleanType =>
-      found.equals(expected)
+      expected match {
+        case BooleanType =>
+          true
+        case _ =>
+          false
+      }
     case StringType =>
-      found.equals(expected)
+      expected match {
+        case StringType =>
+          true
+        case _ =>
+          false
+    }
     case UnitType =>
-      found.equals(expected)
+      expected match {
+        case UnitType =>
+          true
+        case _ =>
+          false
+      }
     case ClassType(name) =>
       if(name.equals(null))
         return false
-      if(found.equals(expected))
-        return true
-
-      val superType = typesDependencies.get(name).getOrElse(null)
-      isSubtype(ClassType(superType), expected)
+      expected match {
+        case ClassType(expectedName) =>
+          expectedName.equals(name)
+        case _ =>
+          val superType = typesDependencies.get(name).getOrElse(null)
+          isSubtype(ClassType(superType), expected)
+      }
   }
 }
