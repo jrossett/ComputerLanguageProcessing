@@ -30,12 +30,12 @@ object TypeChecker extends Pipeline[(Program, SymbolTable), (Program, SymbolTabl
     //  extend these, e.g., to account for local variables).
     // Returns a list of constraints among types. These will later be solved via unification.
     def genConstraints(e: Expr, expected: Type)(implicit env: Map[Identifier, Type]): List[Constraint] = {
-      
+
       // This helper returns a list of a single constraint recording the type
       //  that we found (or generated) for the current expression `e`
       def topLevelConstraint(found: Type): List[Constraint] =
         List(Constraint(found, expected, e.position))
-      
+
       e match {
         case IntLiteral(_) =>
           topLevelConstraint(IntType)
@@ -45,19 +45,19 @@ object TypeChecker extends Pipeline[(Program, SymbolTable), (Program, SymbolTabl
           topLevelConstraint(StringType)
         case UnitLiteral() =>
           topLevelConstraint(UnitType)
-        
+
         case Equals(lhs, rhs) =>
           val T = TypeVariable.fresh()
           val l = genConstraints(lhs, T)
           val r = genConstraints(rhs, T)
           l++r++topLevelConstraint(BooleanType)
-        
+
         case Match(scrut, cases) =>
           // Returns additional constraints from within the pattern with all bindings
           // from identifiers to types for names bound in the pattern.
           // (This is analogous to `transformPattern` in NameAnalyzer.)
           def handlePattern(pat: Pattern, scrutExpected: Type):
-            (List[Constraint], Map[Identifier, Type]) =
+          (List[Constraint], Map[Identifier, Type]) =
           {
             pat match{
               //WildcardPattern()
@@ -175,7 +175,6 @@ object TypeChecker extends Pipeline[(Program, SymbolTable), (Program, SymbolTabl
     // Solve the given set of typing constraints and
     //  call `typeError` if they are not satisfiable.
     // We consider a set of constraints to be satisfiable exactly if they unify.
-    //TODO: Might not be the best way
     def solveConstraints(constraints: List[Constraint]): Unit = {
       constraints match {
         case Nil => ()

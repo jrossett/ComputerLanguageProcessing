@@ -1,2 +1,2 @@
 # ComputerLanguageProcessing
-Adding subtypingto the compiler
+Adding subtyping to the compiler
