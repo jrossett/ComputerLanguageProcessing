@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/amyc.iml" filepath="$PROJECT_DIR$/.idea/modules/amyc.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/amyc-build.iml" filepath="$PROJECT_DIR$/.idea/modules/amyc-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ComputerLanguageProcessing.iml" filepath="$PROJECT_DIR$/ComputerLanguageProcessing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test/test.iml" filepath="$PROJECT_DIR$/test/test.iml" />
     </modules>
   </component>
 </project>
